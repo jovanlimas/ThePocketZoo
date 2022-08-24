@@ -30,7 +30,7 @@ class App extends React.Component {
         if (typeof animalentry === 'object') {
             // do nothing...
         } else {
-            var animalentry = JSON.parse(animalentry);
+            animalentry = JSON.parse(animalentry);
         }
 
         return(
@@ -41,7 +41,7 @@ class App extends React.Component {
                         <h1>{animalentry.name}</h1>
                         <h2>Scientific name: <i>{animalentry.latin_name}</i></h2>
                             <div className="pic">
-                                <img id="photo" src={animalentry.image_link} class="responsive"></img>
+                                <img id="photo" src={animalentry.image_link} alt="" class="responsive"></img>
                             </div>
                             <button className="button" onClick={this.fetchAnimal}>
                                 <span>Next Animal</span>
