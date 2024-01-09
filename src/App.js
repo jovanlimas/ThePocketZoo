@@ -1,66 +1,74 @@
-import React from 'react';
-import axios from 'axios';
-import './App.css';
+import React from "react";
+import axios from "axios";
+import "./App.css";
 
 class App extends React.Component {
-    state = {
-        animalentry : []
+  state = {
+    animalEntry: [],
+    animalFact: [],
+  };
+
+  componentDidMount() {
+    this.fetchAnimal();
+  }
+
+  fetchAnimal = () => {
+    axios
+      .get("https://dog.ceo/api/breeds/image/random")
+      .then((response) => {
+        const animalEntry = response.data;
+        this.setState({ animalEntry });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    axios
+      .get("https://dog-api.kinduff.com/api/facts")
+      .then((response) => {
+        const animalFact = response.data;
+        this.setState({ animalFact });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  render() {
+    var animalEntry = this.state.animalEntry;
+    var animalFact = this.state.animalFact;
+
+    if (typeof animalEntry === "object") {
+      // do nothing...
+    } else {
+      animalEntry = JSON.parse(animalEntry);
     }
 
-    componentDidMount() {
-        this.fetchAnimal();
-    }
-
-    fetchAnimal = () => {
-        axios.get("https://zoo-animal-api.herokuapp.com/animals/rand")
-        .then((response) => {
-            const animalentry = response.data;
-            this.setState({ animalentry });
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-    }
-
-    render() {
-        var animalentry = this.state.animalentry;
-        
-        if (typeof animalentry === 'object') {
-            // do nothing...
-        } else {
-            animalentry = JSON.parse(animalentry);
-        }
-
-        return(
-            <div className="app">
-                <div className="site-title">
-                    <h1>The Pocket Zoo</h1>
-                    <div className="title">
-                        <h1>{animalentry.name}</h1>
-                        <h2>Scientific name: <i>{animalentry.latin_name}</i></h2>
-                            <div className="pic">
-                                <img id="photo" src={animalentry.image_link} alt="" class="responsive"></img>
-                            </div>
-                            <button className="button" onClick={this.fetchAnimal}>
-                                <span>Next Animal</span>
-                            </button>
-                            <h3>All about me</h3>
-                            <div className="facts">
-                                <ul>
-                                    <li>Group&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp; : {animalentry.animal_type}</li>
-                                    <li>Max length&emsp;&emsp;&ensp;&nbsp;&nbsp;: {animalentry.length_max} ft.</li>
-                                    <li>Max weight&emsp;&emsp;&ensp;&ensp;: {animalentry.weight_max} lbs.</li>
-                                    <li>Lifespan&emsp;&emsp;&emsp;&emsp;&nbsp;: {animalentry.lifespan} years</li>
-                                    <li>Habitat&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;: {animalentry.habitat}</li>
-                                    <li>Diet&nbsp;&ensp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;: {animalentry.diet}</li>
-                                    <li>Range&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;: {animalentry.geo_range}</li>
-                                </ul>
-                            </div>
-                    </div>
-                </div>
+    return (
+      <div className="app">
+        <div className="site-title">
+          <h1>Daily Dog Fact!</h1>
+          <div className="title">
+            <h1>Here's your daily Dog Fact!</h1>
+            <div className="pic">
+              <img
+                id="photo"
+                src={animalEntry.message}
+                alt=""
+                class="responsive"
+              ></img>
             </div>
-        )
-    }
+            <button className="button" onClick={this.fetchAnimal}>
+              <span>I want to see another dog!</span>
+            </button>
+            <div className="facts">
+              <h3>{animalFact.facts}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
